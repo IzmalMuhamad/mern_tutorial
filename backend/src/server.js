@@ -8,9 +8,13 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-connectDB();
-
 app.use(express.json()); // Middleware to parse JSON bodies
+
+// Simple custom middleware to log incoming requests
+// app.use((req, res, next) => {
+//   console.log(`A request of ${req.method} method to ${req.url} is made.`);
+//   next();
+// });
 
 app.get("/", (req, res) => {
   res.status(200).send("Go to /api/notes to see the notes through the API!");
@@ -18,6 +22,10 @@ app.get("/", (req, res) => {
 
 app.use("/api/notes", notesRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Connect to the database first and then start the server
+// What's the use of an application if it can't connect to the database
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });

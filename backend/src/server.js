@@ -3,12 +3,23 @@ import notesRoutes from "./routes/notesRoutes.js";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
+import cors from "cors";
+
+import { setServers } from "node:dns/promises"; //add this line for Node.js v20+ to fix the DNS resolution issue
+
+setServers(["1.1.1.1", "8.8.8.8"]); //add this line for Node.js v20+ to fix the DNS resolution issue
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow requests from this origin
+  })
+)
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(rateLimiter); // Apply the rate limiter middleware to all routes
 

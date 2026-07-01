@@ -9,6 +9,7 @@ const HomePage = () => {
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  //this is where backend api will be called
   useEffect(() => {
     const fetchNotes = async () => {
       try {
